@@ -40,6 +40,10 @@
         [
             "bastardkb/charybdis/3x5/v2/splinky_3",
             "max_niia"
+        ],
+        [
+            "crkbd/r2g",
+            "max_niia"
         ]
     ]
 }
