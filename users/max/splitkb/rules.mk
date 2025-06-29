@@ -9,6 +9,9 @@ QUANTUM_PAINTER_DRIVERS += st7789_spi surface
 BACKLIGHT_ENABLE = yes
 BACKLIGHT_DRIVER = pwm
 
+CAPS_WORD_ENABLE  = yes
+NKRO_ENABLE = yes
+
 VPATH += $(USER_PATH)/splitkb/
 SRC += $(USER_PATH)/splitkb/halcyon.c
 HALCONFDIR += $(USER_PATH)/splitkb/halconf.h
