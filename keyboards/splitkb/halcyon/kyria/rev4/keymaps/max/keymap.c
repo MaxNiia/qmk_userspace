@@ -5,15 +5,18 @@
 
 enum layers {
     _QWERTY = 0,
+    _COLEMAK_DH,
+    _QGAMING,
+    _CGAMING,
     _MEDIA,
     _NAVIGATION,
     _FUNCTION,
     _SYMBOLS,
     _NUMBERS,
     _ADJUST,
-    _GAMING,
     _RETRO,
     _GAMNUM,
+    _GAMFUN,
 };
 
 // clang-format off
@@ -25,25 +28,44 @@ enum layers {
 #define SYM   LT(_SYMBOLS   , KC_ESC )
 #define NUM   LT(_NUMBERS   , KC_BSPC)
 #define ADJ   LT(_ADJUST    , KC_DEL )
-#define QWERTY TO(_QWERTY)
+#define QWERTY  DF(_QWERTY)
+#define COLEMAK DF(_COLEMAK_DH)
 
+// QWERTY
 #define GUIA LGUI_T(KC_A)
 #define ALTS LALT_T(KC_S)
 #define CTLD LCTL_T(KC_D)
 #define SFTF LSFT_T(KC_F)
 #define HYPG HYPR_T(KC_G)
+
 #define HYPH HYPR_T(KC_H)
 #define SFTJ LSFT_T(KC_J)
 #define CTLK LCTL_T(KC_K)
 #define ALTL LALT_T(KC_L)
 #define GUIC LGUI_T(KC_SCLN)
 
+// COLEMAK
+#define GUIA LGUI_T(KC_A)
+#define ALTR LALT_T(KC_R)
+#define CTLS LCTL_T(KC_S)
+#define SFTT LSFT_T(KC_T)
+#define HYPG HYPR_T(KC_G)
+
+#define HYPM HYPR_T(KC_M)
+#define SFTN LSFT_T(KC_N)
+#define CTLE LCTL_T(KC_E)
+#define ALTI LALT_T(KC_I)
+#define GUIO LGUI_T(KC_O)
+
 #define LPAREN LSFT_T(KC_LBRC)
 #define RPAREN LCTL_T(KC_RBRC)
 
-#define GAMING TO(_GAMING)
-#define RETRO TO(_RETRO)
-#define GAMNUM MO(_GAMNUM)
+// Gaming
+#define QGAMING DF(_QGAMING)
+#define CGAMING DF(_CGAMING)
+#define RETRO   TG(_RETRO)
+#define GAMNUM  MO(_GAMNUM)
+#define GAMFUN  MO(_GAMFUN)
 
 
 // Last row is for hlc to work correctly. It is a 'mute' section.
@@ -58,39 +80,146 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |        |   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |   ' "  |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |   Z  |   X  |   C  |   V  |   B  | LEFTM|RIGHTM|  |      |      |   N  |   M  | ,  < | . >  | /  ? |        |
+ * |        |   Z  |   X  |   C  |   V  |   B  | LEFTM|RIGHTM|  | GAME | COLE |   N  |   M  | ,  < | . >  | /  ? |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |MIDDLE| MEDIA| NAV  | FUNC |  | SYM  | NUM  | ADJ  |      | Menu |
- *                        |      |  M   | TAB  | Space| Enter|  | ESC  | BSP  | DEL  |      |      |
+ *                        |      | MEDIA| NAV  | FUNC |MIDDLE|  | CAPSW| SYM  | NUM  | ADJ  | Menu |
+ *                        |      | TAB  | Space| Enter|  M   |  |      | ESC  | BSP  | DEL  |      |
  *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_QWERTY] = LAYOUT_split_3x6_5_hlc(
      XXXXXXX,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_LBRC,
      XXXXXXX,    GUIA,    ALTS,    CTLD,    SFTF,    HYPG,                                               HYPH,    SFTJ,    CTLK,    ALTL,    GUIC, KC_QUOT,
-     XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, MS_BTN1, MS_BTN2,        MS_BTN1, MS_BTN2,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, XXXXXXX,
-                                XXXXXXX,     MED,     NAV,    FUNC, MS_BTN3,        MS_BTN3,     SYM,     NUM,     ADJ,  KC_APP,
+     XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, MS_BTN1, MS_BTN2,        QGAMING, COLEMAK,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, XXXXXXX,
+                                XXXXXXX,     MED,     NAV,    FUNC, MS_BTN3,        CW_TOGG,     SYM,     NUM,     ADJ,  KC_APP,
      KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
+
+/*
+ * Base Layer: COLEMAK DH
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |        |   Q  |   W  |   F  |   P  |   B  |                              |   J  |   L  |   U  |   Y  | ;  : |   [ {  |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |        |   A  |   R  |   S  |   T  |   G  |                              |   M  |   N  |   E  |   I  |  O   |   ' "  |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        |   Z  |   X  |   C  |   D  |   V  | LEFTM|RIGHTM|  | GAME |QWERTY|   K  |   H  | ,  < | . >  | /  ? |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      | MEDIA| NAV  | FUNC |MIDDLE|  | CAPSW| SYM  | NUM  | ADJ  | Menu |
+ *                        |      | TAB  | Space| Enter|  M   |  |      | ESC  | BSP  | DEL  |      |
+ *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
+ */
+    [_COLEMAK_DH] = LAYOUT_split_3x6_5_hlc(
+     XXXXXXX,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                                               KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, KC_LBRC,
+     XXXXXXX,    GUIA,    ALTR,    CTLS,    SFTT,    HYPG,                                               HYPM,    SFTN,    CTLE,    ALTI,    GUIO, KC_QUOT,
+     XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, MS_BTN1, MS_BTN2,        CGAMING,  QWERTY,    KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, XXXXXXX,
+                                XXXXXXX,     MED,     NAV,    FUNC, MS_BTN3,        CW_TOGG,     SYM,     NUM,     ADJ,  KC_APP,
+     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
+    ),
+
+/*
+ * Base Layer: QGaming, non home row mods.
+ *
+ * ,-------------------------------------------.                              ,------------------------------------------.
+ * |  TAB   |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  | Enter |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+-------|
+ * | L_SHIFT|   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "  |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+-------|
+ * | L_CTRL |   Z  |   X  |   C  |   V  |   B  | KC_3 | KC_4 |  |QWERTY| RETRO|   N  |   M  | ,  < | . >  | /  ? |  ` ~  |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+---------------------'
+ *                        | L_ALT|GAMNUM| Space| KC_1 | KC_2 |  |      | ESC  | BSP  | DEL  | Menu |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
+ */
+    [_QGAMING] = LAYOUT_split_3x6_5_hlc(
+      KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_ENT,
+     KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                                               KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
+     KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_3,    KC_4,         QWERTY,   RETRO,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_GRV,
+                                KC_LALT,  GAMNUM,  KC_SPC,    KC_1,    KC_2,         GAMFUN,  KC_ESC, KC_BSPC,  KC_DEL,  KC_APP,
+     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
+    ),
+
+/*
+ * Base Layer: CGaming, non home row mods.
+ *
+ * ,-------------------------------------------.                              ,------------------------------------------.
+ * |  TAB   |   Q  |   W  |   F  |   P  |   B  |                              |   J  |   L  |   U  |   Y  | ;  : | ENTER |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+-------|
+ * | L_SHIFT|   A  |   R  |   S  |   T  |   G  |                              |   M  |   N  |   E  |   I  |  O   |  ' "  |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+-------|
+ * | L_CTRL |   Z  |   X  |   C  |   D  |   V  | KC_3 | KC_4 |  | COLE | RETRO|   K  |   H  | ,  < | . >  | /  ? |  ` ~  |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+---------------------'
+ *                        | L_ALT|GAMNUM| Space| KC_1 | KC_2 |  |      | ESC  | BSP  | DEL  | Menu |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
+ */
+    [_CGAMING] = LAYOUT_split_3x6_5_hlc(
+      KC_TAB,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,                                               KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN,  KC_ENT,
+     KC_LSFT,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O, KC_QUOT,
+     KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_3,    KC_4,        COLEMAK,   RETRO,    KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,  KC_GRV,
+                                KC_LALT,  GAMNUM,  KC_SPC,    KC_1,    KC_2,        GAMFUN,   KC_ESC, KC_BSPC,  KC_DEL,  KC_APP,
+     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
+    ),
+
+/*
+ * Base Layer: Retro Gaming, non home row mods and arrow keys.
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * |        |      |      |      |      |      |                              |      |      |   ↑  |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |                              |      |   ←  |   ↓  |   →  |      |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |        |      |      |      |      |      |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
+ */
+    [_RETRO] = LAYOUT_split_3x6_5_hlc(
+     _______, _______, _______, _______, _______, _______,                                            _______, _______,   KC_UP,  _______, _______, _______,
+     _______, _______, _______, _______, _______, _______,                                            _______, KC_LEFT, KC_DOWN, KC_RIGHT, _______, _______,
+     _______, _______, _______, _______, _______, _______, _______, _______,        _______, _______, _______, _______, _______,  _______, _______, _______,
+                                _______, _______, _______, _______, _______,        _______, _______, _______, _______, _______,
+     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
+    ),
+
 
 /*
  * Media  Layer: Media
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |      |      |      |      |      |                              |      | PREV | NEXT |      |      |        |
+ * |        |      |      |      |      |      |                              | PSCR | PREV | NEXT |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  GUI |  Alt | Ctrl | Shift| HYPER|                              |      | PLAY | STOP |      |      |        |
+ * |        |  GUI |  Alt | Ctrl | Shift| HYPER|                              |      | PLAY | STOP |      | CAPSW|        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |      |      |      |      |      |      |      |  |      |      |      | VOL↓ | VOL↑ | MUTE |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_MEDIA] = LAYOUT_split_3x6_5_hlc(
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                             KC_PSCR, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX,  GAMING,
-      XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_HYPR,                                             XXXXXXX, KC_MPLY, KC_MSTP, XXXXXXX, XXXXXXX,   RETRO,
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD, KC_MUTE, KC_VOLU, XXXXXXX, XXXXXXX,
-                                 XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                             KC_PSCR, KC_MPRV, KC_MNXT, XXXXXXX, XXXXXXX, XXXXXXX,
+      XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_HYPR,                                             XXXXXXX, KC_MPLY, KC_MSTP, XXXXXXX, CW_TOGG, XXXXXXX,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD, KC_VOLU, KC_MUTE, XXXXXXX, XXXXXXX,
+                                 XXXXXXX, _______, _______, _______, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
      KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
 
@@ -98,7 +227,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Navigation Layer: Navigation
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
+ * |        |      |      |      |      |      |                              | PSCR |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |        |  GUI |  Alt | Ctrl | Shift| HYPER|                              |  ←   |   ↓  |   ↑  |   →  | CAPSW|        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
@@ -107,12 +236,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_NAVIGATION] = LAYOUT_split_3x6_5_hlc(
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                             KC_PSCR, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
       XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_HYPR,                                             KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, CW_TOGG, XXXXXXX,
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX, KC_HOME, KC_PGDN, KC_PGUP,  KC_END,  KC_INS, XXXXXXX,
-                                 XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
+                                 XXXXXXX, _______, _______, _______, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
      KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
 
@@ -120,7 +252,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Function Layer: Function keys
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |      |      |      |      |      |                              |      |  F7  |  F8  |  F9  |  F12 |        |
+ * |        |      |      |      |      |      |                              | PSCR |  F7  |  F8  |  F9  |  F12 |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |        |  GUI |  Alt | Ctrl | Shift| HYPER|                              |      |  F4  |  F5  |  F6  |  F11 |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
@@ -129,12 +261,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_FUNCTION] = LAYOUT_split_3x6_5_hlc(
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                             KC_PSCR,    KC_7,   KC_F8,   KC_F9,  KC_F12, XXXXXXX,
       XXXXXXX, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_HYPR,                                             XXXXXXX,   KC_F4,   KC_F5,   KC_F6,  KC_F11, XXXXXXX,
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX,   KC_F1,   KC_F2,   KC_F3,  KC_F10, XXXXXXX,
-                                 XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
+                                 XXXXXXX, _______, _______, _______, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
      KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
 
@@ -148,15 +283,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |  ~   |  !   |  @   |  #   |  |   |      |      |  |      |      |      |  {   |  }   |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |  (   |  )   |  _   |  |      |      |      |      |      |
+ *                        |      |  (   |  )   |  _   |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_SYMBOLS] = LAYOUT_split_3x6_5_hlc(
       XXXXXXX,   KC_LCBR,   KC_AMPR, KC_ASTR, KC_LPRN, KC_RCBR,                                            XXXXXXX, KC_LPRN, KC_RPRN, XXXXXXX, XXXXXXX, XXXXXXX,
-      XXXXXXX,   KC_DQT,    KC_DLR, KC_PERC, KC_CIRC, KC_PLUS,                                             KC_HYPR,  LPAREN,  RPAREN, KC_LPRN, KC_LALT, KC_LGUI,
+      XXXXXXX,    KC_DQT,    KC_DLR, KC_PERC, KC_CIRC, KC_PLUS,                                            KC_HYPR,  LPAREN,  RPAREN, KC_LALT, KC_LGUI, XXXXXXX,
       XXXXXXX,   KC_TILD,   KC_EXLM,   KC_AT, KC_HASH, KC_PIPE, XXXXXXX, XXXXXXX,        XXXXXXX, XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, XXXXXXX, XXXXXXX, XXXXXXX,
-                                 XXXXXXX, KC_LPRN, KC_RPRN, KC_UNDS, XXXXXXX,         XXXXXXX, _______, XXXXXXX, XXXXXXX, XXXXXXX,
+                                     XXXXXXX, KC_LPRN, KC_RPRN, KC_UNDS, XXXXXXX,        XXXXXXX, _______, _______, _______, XXXXXXX,
      KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
 
@@ -170,15 +308,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
  * |        |  `   |  1   |  2   |  3   |  \   |      |      |  |      |      |      |  {   |  }   |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |  .   |  0   |  -   |  |      |      |      |      |      |
+ *                        |      |  .   |  0   |  -   |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_NUMBERS] = LAYOUT_split_3x6_5_hlc(
       XXXXXXX, KC_LBRC,    KC_7,    KC_8,    KC_9, KC_RBRC,                                             XXXXXXX, KC_LPRN, KC_RPRN, XXXXXXX, XXXXXXX, XXXXXXX,
-      XXXXXXX, KC_QUOT,    KC_4,    KC_5,    KC_6,  KC_EQL,                                             KC_HYPR,  LPAREN,  RPAREN, KC_LPRN, KC_LALT, KC_LGUI,
+      XXXXXXX, KC_QUOT,    KC_4,    KC_5,    KC_6,  KC_EQL,                                             KC_HYPR,  LPAREN,  RPAREN, KC_LALT, KC_LGUI, XXXXXXX,
       XXXXXXX,  KC_GRV,    KC_1,    KC_2,    KC_3, KC_BSLS, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, XXXXXXX, XXXXXXX, XXXXXXX,
-                                 XXXXXXX,  KC_DOT,    KC_0, KC_MINS, XXXXXXX,         XXXXXXX, XXXXXXX, _______, XXXXXXX, XXXXXXX,
+                                 XXXXXXX,  KC_DOT,    KC_0, KC_MINS, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
      KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
 
@@ -188,86 +329,73 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-------------------------------------------.                              ,-------------------------------------------.
  * |        |      |      |      |      |      |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      |      |      |      |      |                              | TOG  | SAI  | HUI  | VAI  | MOD  |        |
+ * | SPD U  | Next | Bri U| Hue U| Sat U|Toggle|                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      |      |      |      |      |  |      |      |      | SAD  | HUD  | VAD  | RMOD |        |
+ * | SPD D  | Prev | Bri D| Hue D| Sat D|      |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_ADJUST] = LAYOUT_split_3x6_5_hlc(
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
       RM_SPDU, RM_NEXT, RM_VALU, RM_HUEU, RM_SATU, RM_TOGG,                                             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
       RM_SPDD, RM_PREV, RM_VALD, RM_HUED, RM_SATD, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                 XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX, XXXXXXX, _______, XXXXXXX,
+                                 XXXXXXX, _______, _______, _______, XXXXXXX,         XXXXXXX, _______, _______, _______, XXXXXXX,
      KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
 
 /*
- * Base Layer: Gaming, non home row mods.
+ * Number Layer: Gaming, less symbols more left side.
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  TAB   |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  | Enter  |
+ * | TAB    |  `   |  7   |  8   |  9   |  -   |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * | L_SHIFT|   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |   ' "  |
+ * | L_SHIFT|  0   |  4   |  3   |  6   |  =   |                              |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | L_CTRL |   Z  |   X  |   C  |   V  |   B  | KC_3 | KC_4 |  |      |      |   N  |   M  | ,  < | . >  | /  ? |   ` ~  |
+ * | L_CTRL |      |  1   |  2   |  3   |  \   |      |      |  |      |      |      |      |      |      |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | L_ALT|GAMNUM| Space| KC_1 | KC_2 |  |      | ESC  | BSP  | DEL  | Menu |
+ *                        | FUNC |      | Space|      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
- */
-    [_GAMING] = LAYOUT_split_3x6_5_hlc(
-      KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                               KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,  KC_ENT,
-     KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                                               KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
-     KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_3,    KC_4,        XXXXXXX, XXXXXXX,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_GRV,
-                                KC_LALT,  GAMNUM,  KC_SPC,    KC_1,    KC_2,        XXXXXXX,  KC_ESC, KC_BSPC,  KC_DEL,  KC_APP,
-     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
-    ),
-
-/*
- * Base Layer: Retro Gaming, non home row mods and arrow keys.
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  TAB   |   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  | Enter  |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * | L_SHIFT|   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |   ' "  |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | L_CTRL |   Z  |   X  |   C  |   V  |   B  | KC_3 | KC_4 |  |      |      |   N  |   M  | ,  < | . >  | /  ? |   ` ~  |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | L_ALT|GAMNUM| Space| KC_1 | KC_2 |  |      | ESC  | BSP  | DEL  | Menu |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        `----------------------------------'  `----------------------------------'
- */
-    [_RETRO] = LAYOUT_split_3x6_5_hlc(
-      KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                                               KC_Y,    KC_U,   KC_UP,    KC_O,    KC_P,  KC_ENT,
-     KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                                               KC_H, KC_LEFT, KC_DOWN,KC_RIGHT, KC_SCLN, KC_QUOT,
-     KC_LCTL,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_3,    KC_4,        XXXXXXX, XXXXXXX,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_GRV,
-                                KC_LALT,  GAMNUM,  KC_SPC,    KC_1,    KC_2,        XXXXXXX,  KC_ESC, KC_BSPC,  KC_DEL,  KC_APP,
-     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
-    ),
-
-/*
- * Number Layer: Gaming, less symbols more left side
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |  [   |  7   |  8   |  9   |  ]   |                              |   Y  |   U  |   ↑  |   O  |   P  |        |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  '   |  4   |  3   |  6   |  =   |                              |   H  |   ←  |   ↓  |   →  | ;  : |   ' "  |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |  `   |  1   |  2   |  3   |  \   |      |      |  |      |      |   N  |   M  | ,  < | . >  | /  ? |        |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |  .   |  0   |  -   |  | ESC  | BSP  | DEL  |      | Menu |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
  */
     [_GAMNUM] = LAYOUT_split_3x6_5_hlc(
-      KC_TAB,  XXXXXXX,    KC_7,    KC_8,    KC_9, KC_RBRC,                                                KC_Y,    KC_U,   KC_UP,    KC_O,    KC_P,  QWERTY,
-     KC_LSFT,  KC_0,       KC_4,    KC_5,    KC_6,  KC_EQL,                                                KC_H, KC_LEFT, KC_DOWN,KC_RIGHT, KC_SCLN, KC_QUOT,
-     KC_LCTL,  XXXXXXX,    KC_1,    KC_2,    KC_3, KC_BSLS, XXXXXXX, XXXXXXX,         XXXXXXX, XXXXXXX,    KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, XXXXXXX,
-                                 XXXXXXX, XXXXXXX, _______,    KC_0, KC_MINS,         KC_ESC,  KC_BSPC,  KC_DEL, XXXXXXX,  KC_APP,
-     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
+     _______,   KC_GRV,    KC_7,    KC_8,    KC_9, KC_MINS,                                             _______, _______, _______, _______, _______, _______,
+     _______,     KC_0,    KC_4,    KC_5,    KC_6,  KC_EQL,                                             _______, _______, _______, _______, _______, _______,
+     _______,  XXXXXXX,    KC_1,    KC_2,    KC_3, KC_BSLS, XXXXXXX, XXXXXXX,         _______, _______, _______, _______, _______, _______, _______, _______,
+                                 _______, _______,  KC_SPC, XXXXXXX, XXXXXXX,         _______, _______, _______, _______, _______,
+     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                    KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
+    ),
+
+/*
+ * Function Key Layer: Gaming.
+ *
+ * ,-------------------------------------------.                              ,-------------------------------------------.
+ * | TAB    | F9   | F10  | F11  | F12  |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * | L_SHIFT| F5   | F6   | F7   | F8   |      |                              |      |      |      |      |      |        |
+ * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * | L_CTRL | F1   | F2   | F3   | F4   |      |      |      |  |      |      |      |      |      |      |      |        |
+ * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
+ *                        | BASE | BASE | Space|      |      |  |      |      |      |      |      |
+ *                        |      |      |      |      |      |  |      |      |      |      |      |
+ *                        `----------------------------------'  `----------------------------------'
+ * ,-----------------------------------.                                              ,-----------------------------------.
+ * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+ * `-----------------------------------'                                              `-----------------------------------'
+ */
+    [_GAMFUN] = LAYOUT_split_3x6_5_hlc(
+     _______,   KC_F9,  KC_F10,  KC_F11,  KC_F12, XXXXXXX,                                             _______, _______, _______, _______, _______, _______,
+     _______,   KC_F5,   KC_F6,   KC_F7,   KC_F8, XXXXXXX,                                             _______, _______, _______, _______, _______, _______,
+     _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4, XXXXXXX, XXXXXXX, XXXXXXX,         _______, _______, _______, _______, _______, _______, _______, _______,
+                                _______, _______,  KC_SPC, XXXXXXX, XXXXXXX,         _______, _______, _______, _______, _______,
+     KC_MUTE, KC_NO,  KC_NO, KC_NO, KC_NO,                                                                   KC_MUTE, KC_NO, KC_NO, KC_NO, KC_NO
     ),
 
 // /*
@@ -283,6 +411,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  *                        |      |      |      |      |      |  |      |      |      |      |      |
 //  *                        |      |      |      |      |      |  |      |      |      |      |      |
 //  *                        `----------------------------------'  `----------------------------------'
+//  * ,-----------------------------------.                                              ,-----------------------------------.
+//  * | MUTE | ____ | _____ | ____ | ____ |                                              | MUTE | ____ | _____ | ____ | ____ |
+//  * `-----------------------------------'                                              `-----------------------------------'
 //  */
 //     [_LAYERINDEX] = LAYOUT_split_3x6_5_hlc(
 //       _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
@@ -298,7 +429,7 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
     LAYOUT_split_3x6_5_hlc(
        'L', 'L', 'L', 'L', 'L', 'L',                       'R', 'R', 'R', 'R', 'R', 'R',
        'L', 'L', 'L', 'L', 'L', 'L',                       'R', 'R', 'R', 'R', 'R', 'R',
-       'L', 'L', 'L', 'L', 'L', 'L', 'L', 'L',   'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+       'L', 'L', 'L', 'L', 'L', 'L', '*', '*',   '*', '*', 'R', 'R', 'R', 'R', 'R', 'R',
                       '*', '*', '*', '*', '*',   '*', '*', '*', '*', '*',
        '*', '*', '*', '*', '*',                                 '*', '*', '*', '*', '*'
     );
